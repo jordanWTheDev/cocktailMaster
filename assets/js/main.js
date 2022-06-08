@@ -3,6 +3,21 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
+
+// Settings.
+var settings = {
+
+	// Images (in the format of 'url': 'alignment').
+		images: {
+			'images/bg01.jpg': 'center',
+			'images/bg02.jpg': 'center',
+			'images/bg03.jpg': 'center'
+		},
+
+	// Delay.
+		delay: 6000
+
+};
 (function() {
 
 	"use strict";
@@ -30,20 +45,7 @@
 	// Slideshow Background.
 		(function() {
 
-			// Settings.
-				var settings = {
-
-					// Images (in the format of 'url': 'alignment').
-						images: {
-							'images/bg01.jpg': 'center',
-							'images/bg02.jpg': 'center',
-							'images/bg03.jpg': 'center'
-						},
-
-					// Delay.
-						delay: 6000
-
-				};
+			
 
 			// Vars.
 					var	pos = 0, lastPos = 0,
@@ -172,7 +174,7 @@
 
 
 
-//The user will enter a cocktail. Get a cocktail name, photo, and instructions and place them in the DOM
+//The user will enter a cocktail. Get a cocktail name, photo, and instructions
 document.querySelector('#submit').addEventListener('click', getDrink)
 
 function getDrink(){
@@ -185,33 +187,55 @@ function getDrink(){
 			const drink = data.drinks[Math.floor(Math.random() * data.drinks.length)]
 			console.log(drink)
 			console.log(data);
-		  let instructions = drink.strInstructions.split('.')
+		  	let instructions = drink.strInstructions.split('.')
+			let ingredients = getIngredients(drink)
+			let measurements = getMeasure(drink)
 
           document.querySelector('#header').innerHTML = `<h1>${drink.strDrink}</h1>`
 
 		  document.querySelector('#header').innerHTML += '<h3>Ingredients</h3>'
-		  document.querySelector('#header').innerHTML += '<ul id="ingredients"></ul>'
-		  document.querySelector('#ingredients').innerHTML += `<li>${drink.strMeasure1} ${drink.strIngredient1}</li>`
-		  document.querySelector('#ingredients').innerHTML += `<li>${drink.strMeasure2} ${drink.strIngredient2}</li>`
-		 
+		  document.querySelector('#header').innerHTML += '<ul id="ingredients"></ul>'		  
+		 for ( let i = 0; i < ingredients.length; i++) {
+			document.querySelector('#ingredients').innerHTML += `<li>${measurements[i]} ${ingredients[i]}</li>`
+		 }
+
 		  document.querySelector('#header').innerHTML += '<h3>Instructions</h3>'
 		  document.querySelector('#header').innerHTML += '<ul id="instructions"></ul>'
 		  instructions.forEach(element => {
 			  if (element.length > 0){
 			document.querySelector('#instructions').innerHTML += `<li>${element}</li>`
 			  }
+
+		  settings.images[0] = data.strDrinkThumb
 		})
-        //   document.querySelector('#header').innerHTML += `<p>${drink.strInstructions}</p>`
 		 
 		 
-		//   for (let i = 1; i <= 15; i++) {
-		// 	let ing = drink.strIngredient + i
-		// 	let meas = drink.strMeasure + i
-		// 	document.querySelector('#ingredients').innerHTML += `<li>${meas} ${ing}</li>`
-		//   }
 	})
         .catch(err => {
             console.log(`error ${err}`)
         });
   }
 
+
+
+function getIngredients(drink) {
+	const ingredients = Object.entries(drink);
+	const filteredIngredients = ingredients.filter(
+		(a) => a[0].includes("strIngredient") && a[1] !== null && a[1] !== ""
+	);
+	console.log(filteredIngredients)
+	const ingredientsOnly = filteredIngredients.map((a) => a[1]);
+	console.log(ingredientsOnly);
+	return ingredientsOnly;
+}
+
+function getMeasure(drink) {
+	const measurements = Object.entries(drink);
+	const filteredMeasurements = measurements.filter(
+		(a) => a[0].includes("strMeasure") && a[1] !== null && a[1] !== ""
+	);
+	console.log(filteredMeasurements)
+	const measureOnly = filteredMeasurements.map((a) => a[1]);
+	console.log(measureOnly);
+	return measureOnly;
+	}

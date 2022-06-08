@@ -885,3 +885,8 @@ button,
       left: auto;
       margin: 1em 0 0 0;
       position: relative; } }
+
+body {
+  display: flex;
+  width: 50%;
+}
