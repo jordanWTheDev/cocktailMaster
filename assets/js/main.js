@@ -9,9 +9,9 @@ var settings = {
 
 	// Images (in the format of 'url': 'alignment').
 		images: {
-			'images/bg01.jpg': 'center',
-			'images/bg02.jpg': 'center',
-			'images/bg03.jpg': 'center'
+			'images/bg01.jpg' : 'center',
+			'images/bg02.jpg' : 'center',
+			'images/bg03.jpg' : 'center'
 		},
 
 	// Delay.
@@ -149,7 +149,7 @@ var settings = {
 						$submit.disabled = true;
 
 					// Process form.
-					// Note: Doesn't actually do anything yet (other than report back with a "thank you"),
+					// Note: Doesn't actually do anything yet (other than report back with a "found"),
 					// but there's enough here to piece together a working AJAX submission call that does.
 						window.setTimeout(function() {
 
@@ -186,27 +186,37 @@ function getDrink(){
         .then(data => {
 			const drink = data.drinks[Math.floor(Math.random() * data.drinks.length)]
 			console.log(drink)
-			console.log(data);
-		  	let instructions = drink.strInstructions.split('.')
+			// console.log(data);
+			let instructions = drink.strInstructions.split('.')
 			let ingredients = getIngredients(drink)
 			let measurements = getMeasure(drink)
+			const imageURL = drink.strDrinkThumb
+			
+			// delete settings.images['images/bg01.jpg']
+			// delete settings.images['images/bg02.jpg']
+			// delete settings.images['images/bg03.jpg']
 
-          document.querySelector('#header').innerHTML = `<h1>${drink.strDrink}</h1>`
+			// settings[imageURL] = `center`
+			
 
-		  document.querySelector('#header').innerHTML += '<h3>Ingredients</h3>'
-		  document.querySelector('#header').innerHTML += '<ul id="ingredients"></ul>'		  
-		 for ( let i = 0; i < ingredients.length; i++) {
+			document.querySelector('#header').innerHTML = `<h1>${drink.strDrink}</h1>`
+
+			document.querySelector('#header').innerHTML += '<h3>Ingredients</h3>'
+			document.querySelector('#header').innerHTML += '<ul id="ingredients"></ul>'		  
+			for ( let i = 0; i < ingredients.length; i++) {
 			document.querySelector('#ingredients').innerHTML += `<li>${measurements[i]} ${ingredients[i]}</li>`
-		 }
+			}
 
-		  document.querySelector('#header').innerHTML += '<h3>Instructions</h3>'
-		  document.querySelector('#header').innerHTML += '<ul id="instructions"></ul>'
-		  instructions.forEach(element => {
-			  if (element.length > 0){
+			document.querySelector('#header').innerHTML += '<h3>Instructions</h3>'
+			document.querySelector('#header').innerHTML += '<ul id="instructions"></ul>'
+			instructions.forEach(element => {
+				if (element.length > 0){
 			document.querySelector('#instructions').innerHTML += `<li>${element}</li>`
-			  }
+				}
 
-		  settings.images[0] = data.strDrinkThumb
+
+			
+			console.log(settings);
 		})
 		 
 		 
@@ -223,9 +233,9 @@ function getIngredients(drink) {
 	const filteredIngredients = ingredients.filter(
 		(a) => a[0].includes("strIngredient") && a[1] !== null && a[1] !== ""
 	);
-	console.log(filteredIngredients)
+	// console.log(filteredIngredients)
 	const ingredientsOnly = filteredIngredients.map((a) => a[1]);
-	console.log(ingredientsOnly);
+	// console.log(ingredientsOnly);
 	return ingredientsOnly;
 }
 
@@ -234,8 +244,8 @@ function getMeasure(drink) {
 	const filteredMeasurements = measurements.filter(
 		(a) => a[0].includes("strMeasure") && a[1] !== null && a[1] !== ""
 	);
-	console.log(filteredMeasurements)
+	// console.log(filteredMeasurements)
 	const measureOnly = filteredMeasurements.map((a) => a[1]);
-	console.log(measureOnly);
+	// console.log(measureOnly);
 	return measureOnly;
 	}
